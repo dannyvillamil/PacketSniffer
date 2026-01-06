@@ -20,8 +20,8 @@ def packet_callback(packet):
             return
 
         print("=" * 80)
-        print(f"📡 Packet: {src_ip} --> {dst_ip}")
-        print(f"  ✳️ Protocol: {ip_layer.proto} | Length: {len(packet)}")
+        print(f"Packet: {src_ip} --> {dst_ip}")
+        print(f"Protocol: {ip_layer.proto} | Length: {len(packet)}")
 
         if TCP in packet:
             tcp_layer = packet[TCP]
@@ -37,23 +37,23 @@ def packet_callback(packet):
                 # Try HTTP dissection
                 if packet.haslayer(HTTPRequest):
                     http = packet[HTTPRequest]
-                    print(f"  🌐 HTTP Request: {http.Method.decode()} {http.Host.decode()}{http.Path.decode()}")
+                    print(f"HTTP Request: {http.Method.decode()} {http.Host.decode()}{http.Path.decode()}")
                 elif packet.haslayer(HTTPResponse):
-                    print("  🌐 HTTP Response Detected")
+                    print("HTTP Response Detected")
                 elif b"TLS" in payload[:10] or packet[TCP].dport == 443:
-                    print("  🔐 TLS/SSL Packet (could include SNI in ClientHello)")
+                    print("TLS/SSL Packet (could include SNI in ClientHello)")
                 else:
-                    print(f"  📦 Raw Payload (truncated): {payload[:60]!r}")
+                    print(f"Raw Payload (truncated): {payload[:60]!r}")
 
         elif UDP in packet:
             udp_layer = packet[UDP]
-            print(f"  🔄 UDP Ports: {udp_layer.sport} -> {udp_layer.dport}")
+            print(f"UDP Ports: {udp_layer.sport} -> {udp_layer.dport}")
             if Raw in packet:
-                print(f"  📦 Raw UDP Payload: {packet[Raw].load[:60]!r}")
+                print(f"Raw UDP Payload: {packet[Raw].load[:60]!r}")
 
         else:
-            print("  🟡 Non-TCP/UDP packet detected.")
+            print("Non-TCP/UDP packet detected.")
 
 # Interface: change to what you sniff on (e.g., "eth0" or "Wi-Fi")
-print("🚀 Starting deep packet sniffer... (Press Ctrl+C to stop)\n")
+print("Starting deep packet sniffer... (Press Ctrl+C to stop)\n")
 sniff(filter="ip", prn=packet_callback, store=0)
