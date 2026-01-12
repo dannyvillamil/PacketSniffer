@@ -27,9 +27,9 @@ def packet_callback(packet):
             tcp_layer = packet[TCP]
             flags = tcp_layer.flags
 
-            print(f"  🔗 TCP Ports: {tcp_layer.sport} -> {tcp_layer.dport}")
-            print(f"  🔐 Flags: {flags}")
-            print(f"  🧾 Seq: {tcp_layer.seq} | Ack: {tcp_layer.ack}")
+            print(f"  TCP Ports: {tcp_layer.sport} -> {tcp_layer.dport}")
+            print(f"  Flags: {flags}")
+            print(f"  Seq: {tcp_layer.seq} | Ack: {tcp_layer.ack}")
 
             if Raw in packet:
                 payload = packet[Raw].load
